@@ -1,0 +1,24 @@
+## INTRODUÇÃO:
+O objetivo deste projeto foi criar e implementar uma versão funcional do jogo “Batalha Naval” numa grelha 6x6 utilizando exclusivamente a linguagem de programação C.
+Além do jogo em si, foi me também pedido que o mesmo guardasse todas as jogadas que o jogador efetua em cada partida num ficheiro de texto próprio. As bibliotecas a que tive de recorrer para realizar o programa foram as seguintes:
+stdio.h → Funções básicas de C [ scanf(), prints() etc… ].
+stdlib.h → Funções para controlo do processo [ rand() e exit() foram as usadas neste caso ].
+string.h → Funções para trabalhar strings introduzidas.
+time.h → Funções relacionadas com a data do sistema, foram usadas para gerar a seed da função rand() e também para facilmente introduzir no ficheiro a data e hora de inicio de cada partida.
+## EM MAIS DETALHE:
+Como pedido pelo enunciado comecei por criar os arrays grelha[6][6] e jogadas[6][6] ambos iniciados completamente a 0, de seguida, também como pedido no enunciado, elaborei uma função para aleatoriamente criar um navio dentro da grelha, a função gerar_navio (utilizando rand() com uma seed aleatória através da biblioteca time.h), os elementos aleatórios da grelha que sejam alvo desta função são modificados de modo a terem um comportamento diferente dos outros (os que não têm partes do navio) quando atingidos pelo utilizador. Criei ainda uma função modular, mostrar_batalha, para fazer uma tabela com quadriculas de modo a representar a grelha como um verdadeiro campo de jogo, com a respetiva legenda a acompanhar.
+O programa começa por dar a informação sobre o jogo ao utilizador e depois usa a função da tabela para mostrar o campo pela primeira vez. É depois pedido ao utilizador que insira uma linha e uma coluna para marcar o quadrado em que quer jogar, estes inputs estão protegidos tanto contra escolher uma opção fora dos limites do campo, bem como se o utilizador tentar introduzir algo que não seja um número inteiro como opção (char ou float por exemplo) ou um número demasiado grande, na tentativa de causar um overflow (apenas os dois primeiros dígitos são lidos já que o máximo é 6).
+Após a primeira jogada elaborei a função GuardaPartida que escreve para o ficheiro a data e hora atual (com ajuda da biblioteca time.h que já foi precisa para gerar o navio) de modo a indicar que ali foi inicada uma nova partida. A partir daí todas as jogadas, bem como o que acontece em cada uma, são registadas no ficheiro até o utilizador ganhar.
+Depois de cada jogada, como pedido pelo enunciado, o utilizador pode decidir se quer ou não ver o estado do campo de jogo, além disso acrescentei ainda uma opção para desistir, com o respetivo registo de desistência a ser guardado no ficheiro e terminando o programa. Por outro lado, se o utilizador continuar a jogar o programa apenas termina quando acertar nas 5 partes do navio, sendo mostrada uma mensagem de parabéns e guardado no ficheiro o registo da vitória.
+PROBLEMAS:
+Durante a realização deste programa tive algumas dificuldades e durante as minhas pesquisas encontrei uma nova definição, um buffer, uma área de armazenamento temporário que existe em todos os dispositivos de entrada e saída padrão.
+Assim, por exemplo, quando introduzimos qualquer informação no scanf() do programa, ela fica armazenada em buffer pelo sistema operacional. Em resultado deste comportamento houve algumas situações em que quando inseria uma opção e carregava no ENTER, o programa contava essa tecla como uma das entradas e o próximo scanf() era imediatamente “saltado” pois recebia esse ENTER restante no buffer como input.
+Para solucionar o problema usei a função fflush(stdin). Na minha pesquisa descobri que esta função não é muito recomendada dado à sua incompatibilidade com outros sistemas, mas dado o contexto do projeto esta função funciona perfeitamente em Windows e é uma das maneira mais fáceis de limpar o buffer neste sistema. Para outras plataformas teria de ser melhorado aqui.
+## CONCLUSÃO:
+Gostaria de concluir referindo que, com mais algum tempo, algo que possivelmente melhoraria no programa seria tornar o campo modular, uma vez que maior parte das funções aceitam como argumento as linhas e colunas (inclusive a função tabela que desenha o campo já é modular) seria muito fácil alterar o programa de modo a que o utilizador pudesse escolher as medidas do campo antes do jogo iniciar, conseguindo assim de certo modo também escolher o nível de dificuldade do jogo (campo maior ou mais pequeno para um navio do mesmo tamanho faz variar a dificuldade estatisticamente).
+## BIBLIOGRAFIA
+“ Clearing The Input Buffer In C/C++”
+Consultado a 08 de 05 de 2022, de GeeksforGeeks: https://www.geeksforgeeks.org/clearing-the-input-buffer-in-cc/
+“Print the current date and time in C”
+Consultado a 09 de 05 de 2022, de CodeVsColor:
+https://www.codevscolor.com/c-print-current-time-day-month-year
